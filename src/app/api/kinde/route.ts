@@ -38,7 +38,12 @@ export async function POST(req: Request) {
       case "user.created":
         // handle user created event
         // e.g add user to database with event.data
-        await checkAuthStatus();
+        const authCreateResponse = await checkAuthStatus();
+        if (!authCreateResponse.success) {
+          console.log("User Creation Failed");
+        } else {
+          console.log("User Created Successfully");
+        }
         console.log(event.data);
         break;
       default:
