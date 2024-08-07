@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import jwksClient from "jwks-rsa";
 import jwt from "jsonwebtoken";
+import { checkAuthStatus } from "@/actions/auth.actions";
 
 // The Kinde issuer URL should already be in your `.env` file
 // from when you initially set up Kinde. This will fetch your
@@ -34,20 +35,12 @@ export async function POST(req: Request) {
 
     // Handle various events
     switch (event?.type) {
-      case "user.updated":
-        // handle user updated event
-        // e.g update database with event.data
-        console.log(event.data);
-        break;
       case "user.created":
         // handle user created event
         // e.g add user to database with event.data
+        await checkAuthStatus();
         console.log(event.data);
         break;
-      case "user.deleted":
-        // handle user deleted event
-        // e.g remove user from database with event.data
-        console.log(event.data);
       default:
         // other events that we don't handle
         break;
