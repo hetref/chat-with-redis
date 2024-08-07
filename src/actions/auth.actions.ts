@@ -50,7 +50,7 @@ export const checkAuthStatus = async ({
   // const imgIsNull = user.picture?.includes("gravtar");
   // const image = imgIsNull ? "" : user.picture;
 
-  await redis.set(userId, {
+  await redis.hset(userId, {
     id: user.id,
     email: user.email,
     name: `${user?.first_name} ${user?.last_name}`,
