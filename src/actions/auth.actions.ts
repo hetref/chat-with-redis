@@ -10,7 +10,6 @@ export const checkAuthStatus = async () => {
   if (!user) return { success: false };
 
   const userId = `user:${user.id}`;
-
   const imgIsNull = user.picture?.includes("gravtar");
   const image = imgIsNull ? "" : user.picture;
 
