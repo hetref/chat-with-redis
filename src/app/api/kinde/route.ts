@@ -44,6 +44,10 @@ export async function POST(req: Request) {
         // e.g add user to database with event.data
         console.log(event.data);
         break;
+      case "user.deleted":
+        // handle user deleted event
+        // e.g remove user from database with event.data
+        console.log(event.data);
       default:
         // other events that we don't handle
         break;
