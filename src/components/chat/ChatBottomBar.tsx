@@ -21,6 +21,9 @@ import {
 import { USERS } from "@/db/dummy";
 import { usePreferences } from "@/store/usePreferences";
 import EmojiPicker from "./EmojiPicker";
+import { useMutation } from "@tanstack/react-query";
+import { sendMessageAction } from "@/actions/message.action";
+import { useSelectedUser } from "@/store/useSelectedUser";
 
 const ChatBottomBar = () => {
   const [message, setMessage] = useState("");
@@ -38,25 +41,27 @@ const ChatBottomBar = () => {
 
   const playSoundFunctions = [playSound1, playSound2, playSound3, playSound4];
 
-  const selectedUser = USERS[0];
+  const { selectedUser } = useSelectedUser();
+
+  // const selectedUser = USERS[0];
 
   const playRandomKeyStrokeSound = () => {
     const randomIndex = Math.floor(Math.random() * playSoundFunctions.length);
     soundEnabled && playSoundFunctions[randomIndex]();
   };
 
-  // const { mutate: sendMessage, isPending } = useMutation({
-  //   mutationFn: sendMessageAction,
-  // });
+  const { mutate: sendMessage, isPending } = useMutation({
+    mutationFn: sendMessageAction,
+  });
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
 
-    // sendMessage({
-    //   content: message,
-    //   messageType: "text",
-    //   receiverId: selectedUser?.id!,
-    // });
+    sendMessage({
+      content: message,
+      messageType: "text",
+      receiverId: selectedUser?.id!,
+    });
     setMessage("");
 
     textAreaRef.current?.focus();
@@ -220,20 +225,20 @@ const ChatBottomBar = () => {
             variant={"ghost"}
             size={"icon"}
           >
-            {/* {!isPending && ( */}
-            <ThumbsUp
-              size={20}
-              className="text-muted-foreground"
-              // onClick={() => {
-              //   sendMessage({
-              //     content: "👍",
-              //     messageType: "text",
-              //     receiverId: selectedUser?.id!,
-              //   });
-              // }}
-            />
-            {/* )} */}
-            {/* {isPending && <Loader size={20} className="animate-spin" />} */}
+            {!isPending && (
+              <ThumbsUp
+                size={20}
+                className="text-muted-foreground"
+                onClick={() => {
+                  sendMessage({
+                    content: "👍",
+                    messageType: "text",
+                    receiverId: selectedUser?.id!,
+                  });
+                }}
+              />
+            )}
+            {isPending && <Loader size={20} className="animate-spin" />}
           </Button>
         )}
       </AnimatePresence>
